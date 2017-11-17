@@ -6,3 +6,6 @@ A short and easy script to get the status of the database, it shows the instance
 
 ## selectivity.sql
 Get statistics of the distribution of the values on a column or group of columns to help on the decision making of create/alter/drop indexes
+
+## getDesyncSequences.sql
+PL/SQL block created to find sequences of an database that have their curr value lower than the column where they are used for

@@ -1,7 +1,3 @@
-/* Proc created because of an issue found on a client where the 
-   sequences of an database were with their curr number very behind 
-   the actual value of the column thwy were used for */
-
 SET SERVEROUTPUT ON SIZE UNLIMITED
 SET FEEDBACK ON
 

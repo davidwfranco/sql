@@ -1,9 +1,21 @@
 -- Drop all objects of a given schema
 -- Thanks to Lucas Bernardini for the script wireframe
 
-undefine owner
+PROMPT INFO: BEGIN cleanSchema.sql
+
+var v_owner varchar2(30);
+
+exec :v_owner := '&1';
 
 set serveroutput on size unlimited verify off
+
+PROMPT INFO: Object count BEFORE cleaning the schema
+
+select object_type, count(*)
+  from dba_objects
+ where owner = upper(:v_owner)
+ group by object_type
+;
 
 declare
     cmd varchar2(200);
@@ -11,7 +23,7 @@ declare
     cursor tables is 
         select t.owner, t.table_name
           from dba_tables t
-         where t.owner = upper('&&owner')
+         where t.owner = upper(:v_owner)
            and t.table_name not in (select object_name 
                                       from dba_objects 
                                      where owner = t.owner 
@@ -23,31 +35,31 @@ declare
          where object_type not in ('TABLE', 'INDEX', 'TRIGGER', 'LOB', 'PACKAGE BODY', 'JOB', 'SCHEDULE', 'DATABASE LINK')
            and object_type not like '%LINK%'
            and object_type not like '%PARTITION%'
-           and owner = upper('&&owner')
+           and owner = upper(:v_owner)
          order by 1;
 
     cursor pkgs is 
         select object_type, owner, object_name
           from dba_objects
          where object_type = 'PACKAGE BODY'
-           and owner = upper('&&owner')
+           and owner = upper(:v_owner)
          order by 1;
 
     cursor jobs is 
         select owner, object_name
           from dba_objects
          where object_type = 'JOB'
-           and owner = upper('&&owner')
+           and owner = upper(:v_owner)
          order by 1;
 
     cursor schedules is 
         select owner, object_name
           from dba_objects
          where object_type = 'SCHEDULE'
-           and owner = upper('&&owner')
+           and owner = upper(:v_owner)
          order by 1;
 begin
-    dbms_output.put_line('INFO: Dropping objects from schema &&owner');
+    dbms_output.put_line('INFO: Dropping objects from schema ' || :v_owner);
     dbms_output.put_line('INFO: Dropping tables...');
     for tbl in tables loop
         begin
@@ -110,9 +122,12 @@ begin
 end;
 /
 
+PROMPT INFO: Object count AFTER cleaning the schema
+
 select object_type, count(*)
   from dba_objects
- where owner = upper('&&owner')
+ where owner = upper(:v_owner)
  group by object_type
 ;
  
+PROMPT INFO: END cleanSchema.sql

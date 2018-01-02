@@ -63,8 +63,8 @@ begin
     dbms_output.put_line('INFO: Dropping tables...');
     for tbl in tables loop
         begin
-            --execute immediate 'drop table '||tbl.owner||'.'||tbl.table_name||' cascade constraints purge';
-            dbms_output.put_line('drop table '||tbl.owner||'.'||tbl.table_name||' cascade constraints purge');
+            execute immediate 'drop table '||tbl.owner||'.'||tbl.table_name||' cascade constraints purge';
+            --dbms_output.put_line('drop table '||tbl.owner||'.'||tbl.table_name||' cascade constraints purge');
         exception
             when no_data_found then
                 dbms_output.put_line('ERROR: Drop failed on Table: '||tbl.owner||'.'||tbl.table_name||' --> '|| sqlerrm);
@@ -75,8 +75,8 @@ begin
     dbms_output.put_line('INFO: Dropping other objects...');
     for obj in miscObjects loop
         begin
-            --execute immediate 'drop '||obj.object_type||' '||obj.owner||'.'||obj.object_name;
-            dbms_output.put_line('drop '||obj.object_type||' '||obj.owner||'.'||obj.object_name);
+            execute immediate 'drop '||obj.object_type||' '||obj.owner||'.'||obj.object_name;
+            --dbms_output.put_line('drop '||obj.object_type||' '||obj.owner||'.'||obj.object_name);
         exception
             when no_data_found then
                 dbms_output.put_line('ERROR: Drop failed on '||obj.object_type||': '||obj.owner||'.'||obj.object_name||' --> '|| sqlerrm);
@@ -87,8 +87,8 @@ begin
     dbms_output.put_line('INFO: Dropping Packages...');
     for pkg in pkgs loop
         begin
-            --execute immediate 'drop '||pkg.object_type||' '||pkg.owner||'.'||pkg.object_name;
-            dbms_output.put_line('drop '||pkg.object_type||' '||pkg.owner||'.'||pkg.object_name);
+            execute immediate 'drop '||pkg.object_type||' '||pkg.owner||'.'||pkg.object_name;
+            --dbms_output.put_line('drop '||pkg.object_type||' '||pkg.owner||'.'||pkg.object_name);
         exception
             when no_data_found then
                 dbms_output.put_line('ERROR: Drop failed on '||pkg.object_type||': '||pkg.owner||'.'||pkg.object_name||' --> '|| sqlerrm);
@@ -99,8 +99,8 @@ begin
     dbms_output.put_line('INFO: Dropping jobs...');
     for job in jobs loop
         begin
-            --dbms_scheduler.drop_job(job.owner||'.'||job.object_name);
-            dbms_output.put_line('dbms_scheduler.drop_job('||job.owner||'.'||job.object_name||')');
+            dbms_scheduler.drop_job(job.owner||'.'||job.object_name);
+            --dbms_output.put_line('dbms_scheduler.drop_job('||job.owner||'.'||job.object_name||')');
         exception
             when no_data_found then
                 dbms_output.put_line('ERROR: Drop failed on JOB: '||job.owner||'.'||job.object_name||' --> '|| sqlerrm);
@@ -111,8 +111,8 @@ begin
     dbms_output.put_line('INFO: Dropping schedules...');
     for schedule in schedules loop
         begin
-            --dbms_scheduler.drop_schedule(schedule.owner||'.'||schedule.object_name);
-            dbms_output.put_line('dbms_scheduler.drop_schedule('||schedule.owner||'.'||schedule.object_name||')');
+            dbms_scheduler.drop_schedule(schedule.owner||'.'||schedule.object_name);
+            --dbms_output.put_line('dbms_scheduler.drop_schedule('||schedule.owner||'.'||schedule.object_name||')');
         exception
             when no_data_found then
                 dbms_output.put_line('ERROR: Drop failed on SCHEDULE: '||schedule.owner||'.'||schedule.object_name||' --> '|| sqlerrm);

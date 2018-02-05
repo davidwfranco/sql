@@ -15,4 +15,5 @@ where grantee in (:v_owner)
 union all
 select 'grant '||privilege||' on '||owner||'.'||table_name||' to '||grantee||';' 
   from dba_tab_privs 
- where grantee in (:v_owner);
+ where grantee in (:v_owner)
+;

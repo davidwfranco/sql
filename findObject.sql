@@ -16,5 +16,5 @@ SELECT DISTINCT OWNER,
        STATUS
   FROM DBA_OBJECTS 
  WHERE OBJECT_NAME like upper('%' || :v_owner || '%')
- ORDER BY 2, 3
+ ORDER BY 1, 2, 3
 ;

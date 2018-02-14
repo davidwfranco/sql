@@ -2,6 +2,10 @@ set lines 165 pages 50000 long 10000
 SET SERVEROUTPUT ON SIZE UNLIMITED
 SET FEEDBACK ON
 
+var v_owner varchar2(30);
+
+exec :v_owner := '&1';
+
 DECLARE
     DIFF NUMBER;
     TAB_MAX_VAL NUMBER; 
@@ -17,7 +21,7 @@ BEGIN
                  AND DCC.TABLE_NAME = SUBSTR(DS.SEQUENCE_NAME,4) /* Swap TABLE_NAME with COLUMN_NAME 
                                                                     here if needed and change the 
                                                                     substring if needed also */
-                 AND DCC.OWNER = 'BRAXTS_CFG'
+                 AND DCC.OWNER = :v_owner
                  AND DCC.CONSTRAINT_NAME NOT IN (SELECT CONSTRAINT_NAME 
                                                    FROM ALL_CONS_COLUMNS 
                                                   WHERE POSITION = 2)
@@ -29,10 +33,9 @@ BEGIN
         /* For each Sequence / Table / Column returned above, get the max val on the field, subtract 
             the last val on the sequence from it and set it into the DIFF variable */
         SQL_CMD := 'SELECT A.MAX, (A.MAX - ' || I.LAST_NUMBER || ') FROM (SELECT MAX(' ||  
-            I.COLUMN_NAME || ') AS MAX FROM BRAXTS_CFG.' || I.TABLE_NAME || ') A';
+            I.COLUMN_NAME || ') AS MAX FROM ' || :v_owner || '.' || I.TABLE_NAME || ') A';
         
         EXECUTE IMMEDIATE SQL_CMD INTO TAB_MAX_VAL, DIFF;
-
          
         IF DIFF > 0 THEN
 
@@ -46,15 +49,17 @@ BEGIN
                 ' / TAB_MAX_VAL: ' || TAB_MAX_VAL || ' / DIFF: ' || DIFF || ' ===--');
             DBMS_OUTPUT.PUT_LINE('--');
 
-            /* From here on it's the correction cmds, with a alter sequence to raise the increment by with the diff, a call to seq nextval to equalize the values and an alter sequence to return the increment by value to the original */
-            DBMS_OUTPUT.PUT_LINE('ALTER SEQUENCE BRAXTS_CFG.' || I.SEQUENCE_NAME || 
+            /* From here on it's the correction cmds, with a alter sequence to raise the increment 
+                by with the diff, a call to seq nextval to equalize the values and an alter sequence 
+                to return the increment by value to the original */
+            DBMS_OUTPUT.PUT_LINE('ALTER SEQUENCE ' || :v_owner || '.' || I.SEQUENCE_NAME || 
                 ' INCREMENT BY ' || DIFF || ';');
             DBMS_OUTPUT.PUT_LINE('--');
 
-            DBMS_OUTPUT.PUT_LINE('SELECT BRAXTS_CFG.'|| I.SEQUENCE_NAME  || '.NEXTVAL FROM DUAL;');
+            DBMS_OUTPUT.PUT_LINE('SELECT ' || :v_owner || '.'|| I.SEQUENCE_NAME  || '.NEXTVAL FROM DUAL;');
             DBMS_OUTPUT.PUT_LINE('--');
 
-            DBMS_OUTPUT.PUT_LINE('ALTER SEQUENCE BRAXTS_CFG.' || I.SEQUENCE_NAME || 
+            DBMS_OUTPUT.PUT_LINE('ALTER SEQUENCE ' || :v_owner || '.' || I.SEQUENCE_NAME || 
                 ' INCREMENT BY ' || I.INCREMENT_BY || ';');
             DBMS_OUTPUT.PUT_LINE('-- ');
         END IF;

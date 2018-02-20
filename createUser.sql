@@ -1,10 +1,14 @@
 set serveroutput on size unlimited
 set feedback on
 
+var v_owner varchar2(30);
+
+exec :v_owner := '&1';
+
 DECLARE
     TYPE NamesList IS TABLE OF VARCHAR2(30);  -- nested table type
     usernames NamesList := NamesList(
-      'USER_847448','USER_928866','USER_993233','USER_886618','USER_A34104'
+      :v_owner
     );
     tempTbsName VARCHAR2(50);
     v_count NUMBER;
@@ -55,4 +59,4 @@ BEGIN
 END;
 /
 
---exit;
+exit;

@@ -3,7 +3,7 @@
 
 var v_owner varchar2(30);
 
-exec :v_owner := upper('&1');
+exec :v_owner := '&1';
 
 select 'grant '||granted_role||' to '||grantee||';' 
   from dba_role_privs 
@@ -17,5 +17,3 @@ select 'grant '||privilege||' on '||owner||'.'||table_name||' to '||grantee||';'
   from dba_tab_privs 
  where grantee in (:v_owner)
 ;
-
-exit

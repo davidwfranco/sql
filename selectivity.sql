@@ -1,4 +1,6 @@
-/* Get the quality of an column or group of columns to be used in an index */
+/* Get the quality of an column or group of columns to be used in an index 
+Returns the total rows on the table, the number of distinct values, and min, avg and max rows returned 
+using this set of columns*/
 
 column sum         for 9999999999 head 'Total #| Rows'
 column cnt         for 9999999999 head 'Total #| Dist Values'

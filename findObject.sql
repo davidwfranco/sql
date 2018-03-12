@@ -15,6 +15,6 @@ SELECT DISTINCT OWNER,
        TO_CHAR(CREATED, 'DD/MM/YYYY HH24:MI'),
        STATUS
   FROM DBA_OBJECTS 
- WHERE OBJECT_NAME like upper('%' || :v_owner || '%')
+ WHERE OBJECT_NAME like upper(:v_owner)
  ORDER BY 1, 2, 3
 ;

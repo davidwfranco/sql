@@ -18,4 +18,4 @@ select 'grant '||privilege||' on '||owner||'.'||table_name||' to '||grantee||';'
  where grantee in (:v_owner)
 ;
 
-exit
+--exit

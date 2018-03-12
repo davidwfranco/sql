@@ -1,6 +1,8 @@
 set lines 200
 set pages 50000
 set long 1000000
+col FILE_NAME for a100
+col TABLESPACE_NAME for a30
 
 var tbs_name varchar2(30);
 
@@ -8,11 +10,11 @@ exec :tbs_name := upper('&1');
 
 select dt.TABLESPACE_NAME,
         ddf.FILE_NAME,
-        ddf.BYTES/1024/1024 as U_SPACE_MB,
-        ddf.MAXBYTES/1024/1024 as A_SPACE_MB,
+        round(ddf.BYTES/1024/1024, 2) as U_SPACE_MB,
+        round(ddf.MAXBYTES/1024/1024, 2) as A_SPACE_MB,
         ddf.AUTOEXTENSIBLE
 from dba_tablespaces dt, dba_data_files ddf
-where dt.TABLESPACE_NAME = ddf.FILE_NAME
+where dt.TABLESPACE_NAME = ddf.TABLESPACE_NAME
 and dt.TABLESPACE_NAME like :tbs_name
 ;
 

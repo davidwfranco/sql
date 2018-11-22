@@ -1,5 +1,7 @@
 /* Script to get the minnimal information about a table in oracle */
 
+set lines 160 pages 50000 long 10000
+
 col owner for a15
 col table for a30
 col tablespace_name for a20

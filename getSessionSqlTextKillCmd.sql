@@ -10,8 +10,8 @@ COL MACHINE FOR A18
 COL SPID FOR A8
 col MIN for '99999.99'
 
-SELECT DISTINCT S.INST_ID, 
-  S.USERNAME, 
+SELECT DISTINCT S.INST_ID,
+  S.USERNAME,
   S.STATUS, S.MODULE,
   S.SID, S.SERIAL#, S.SQL_ID, V.EVENT,
   S.LAST_CALL_ET/60 as min
@@ -31,8 +31,8 @@ SELECT SQL_ID, SQL_TEXT
 ;
 
 /* ---------- Sql Text of All the Active Sessions of a Specific User ---------- */
-SELECT SQL_ID, 
-       SQL_TEXT 
+SELECT SQL_ID,
+       SQL_TEXT
   FROM GV$SQLTEXT
  WHERE SQL_ID IN ( SELECT DISTINCT SQL_ID
                      FROM GV$SESSION
